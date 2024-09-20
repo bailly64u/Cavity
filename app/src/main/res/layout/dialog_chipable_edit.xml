@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/chipableIcon"
+            android:layout_width="@dimen/large_icon"
+            android:layout_height="@dimen/large_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+            android:id="@+id/editImageIcon"
+            android:layout_width="@dimen/xsmall_icon"
+            android:layout_height="@dimen/xsmall_icon"
+            app:layout_constraintEnd_toEndOf="@id/chipableIcon"
+            app:layout_constraintBottom_toBottomOf="@id/chipableIcon"
+            app:tint="?attr/colorOnSurface"
+            android:src="@drawable/ic_edit" />
+
+    <com.louis.app.cavity.ui.widget.RuledTextInputLayout
+            android:id="@+id/chipableText"
+            android:layout_width="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/chipableIcon"
+            android:text="nom"
+            app:rule="required"
+            app:layout_constraintBottom_toBottomOf="@id/chipableIcon"
+            app:layout_constraintTop_toTopOf="@id/chipableIcon" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

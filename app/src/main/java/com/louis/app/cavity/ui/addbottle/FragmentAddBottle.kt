@@ -14,7 +14,7 @@ import com.louis.app.cavity.util.TransitionHelper
 import com.louis.app.cavity.util.showSnackbar
 
 class FragmentAddBottle : Stepper() {
-    lateinit var snackbarProvider: SnackbarProvider
+    private lateinit var snackbarProvider: SnackbarProvider
     private val addBottleViewModel: AddBottleViewModel by viewModels()
     private val args: FragmentAddBottleArgs by navArgs()
 

@@ -1,182 +1,181 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/coordinator"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <androidx.core.widget.NestedScrollView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/coordinator"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/autoAnimate"
+    <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:animateLayoutChanges="true">
+            android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/autoAnimate"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:animateLayoutChanges="true">
 
             <View
-                android:id="@+id/divider"
-                style="@style/Widget.Cavity.Divider"
-                android:layout_marginTop="0dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                    android:id="@+id/divider"
+                    style="@style/Widget.Cavity.Divider"
+                    android:layout_marginTop="0dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/otherInfoTitle"
-                style="?attr/textAppearanceSubtitle1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/medium_margin"
-                android:text="@string/other_info"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/divider" />
+                    android:id="@+id/otherInfoTitle"
+                    style="?attr/textAppearanceSubtitle1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/medium_margin"
+                    android:text="@string/other_info"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/otherInfoLayout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/medium_margin"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/otherInfoTitle">
+                    android:id="@+id/otherInfoLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/medium_margin"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/otherInfoTitle">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/otherInfo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/other_info"
-                    android:inputType="textCapSentences" />
+                        android:id="@+id/otherInfo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/other_info"
+                        android:inputType="textCapSentences" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButtonToggleGroup
-                android:id="@+id/rbGroupSize"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/medium_margin"
-                android:visibility="visible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/otherInfoLayout"
-                app:selectionRequired="true"
-                app:singleSelection="true">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/rbSlim"
-                    style="?attr/materialButtonOutlinedStyle"
+                    android:id="@+id/rbGroupSize"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/size_slim"
-                    android:textAppearance="?attr/textAppearanceSubtitle1" />
+                    android:layout_margin="@dimen/medium_margin"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/otherInfoLayout"
+                    app:selectionRequired="true"
+                    app:singleSelection="true">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/rbSmall"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/size_small"
-                    android:textAppearance="?attr/textAppearanceSubtitle1" />
+                        android:id="@+id/rbSlim"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/size_slim"
+                        android:textAppearance="?attr/textAppearanceSubtitle1" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/rbNormal"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/size_normal"
-                    android:textAppearance="?attr/textAppearanceSubtitle1" />
+                        android:id="@+id/rbSmall"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/size_small"
+                        android:textAppearance="?attr/textAppearanceSubtitle1" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/rbMagnum"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/size_magnum"
-                    android:textAppearance="?attr/textAppearanceSubtitle1" />
+                        android:id="@+id/rbNormal"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/size_normal"
+                        android:textAppearance="?attr/textAppearanceSubtitle1" />
+
+                <com.google.android.material.button.MaterialButton
+                        android:id="@+id/rbMagnum"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/size_magnum"
+                        android:textAppearance="?attr/textAppearanceSubtitle1" />
 
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
             <CheckBox
-                android:id="@+id/addToFavorite"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/medium_margin"
-                android:text="@string/inquire_add_to_favorites"
-                android:textAppearance="?attr/textAppearanceBody2"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rbGroupSize" />
+                    android:id="@+id/addToFavorite"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/medium_margin"
+                    android:text="@string/inquire_add_to_favorites"
+                    android:textAppearance="?attr/textAppearanceBody2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/rbGroupSize" />
 
             <CheckBox
-                android:id="@+id/giftedBy"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/medium_margin"
-                android:text="@string/gifted_by_friend"
-                android:textAppearance="?attr/textAppearanceBody2"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/addToFavorite" />
+                    android:id="@+id/giftedBy"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/medium_margin"
+                    android:text="@string/gifted_by_friend"
+                    android:textAppearance="?attr/textAppearanceBody2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/addToFavorite" />
 
-            <HorizontalScrollView
-                android:id="@+id/friendScrollView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                android:paddingHorizontal="@dimen/medium_margin"
-                android:scrollbars="none"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/giftedBy">
+            <View
+                    android:id="@+id/divider2"
+                    style="@style/Widget.Cavity.Divider"
+                    android:layout_marginTop="@dimen/small_margin"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/giftedBy" />
 
-                <LinearLayout
+            <TextView
+                    android:id="@+id/friendTitle"
+                    style="?attr/textAppearanceSubtitle1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/large_margin"
-                    android:orientation="horizontal">
+                    android:layout_margin="@dimen/medium_margin"
+                    android:text="@string/friends"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider2" />
 
-                    <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/friendChipGroup"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/medium_margin"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/nameLayout"
-                        app:selectionRequired="true"
-                        app:singleLine="true"
-                        app:singleSelection="true" />
+            <ImageButton
+                    android:id="@+id/buttonAddFriend"
+                    android:layout_width="@dimen/medium_icon"
+                    android:layout_height="@dimen/medium_icon"
+                    android:layout_marginEnd="@dimen/medium_margin"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/add_friend"
+                    android:src="@drawable/ic_add"
+                    app:layout_constraintBottom_toBottomOf="@+id/friendTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/friendTitle"
+                    app:tint="?attr/colorOnBackground" />
 
-                </LinearLayout>
-            </HorizontalScrollView>
+            <include
+                    android:id="@+id/friend"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/small_margin"
+                    android:layout_marginHorizontal="@dimen/medium_margin"
+                    app:layout_constraintTop_toBottomOf="@id/friendTitle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:visibility="visible"
+                    layout="@layout/item_friend" />
+
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/buttonAddFriend"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/medium_margin"
-                android:layout_marginTop="@dimen/xsmall_margin"
-                android:text="@string/add_friend"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/friendScrollView" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/buttonAddPdf"
-                style="@style/Widget.Cavity.Button.OutlinedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/medium_margin"
-                android:layout_marginBottom="100dp"
-                android:text="@string/add_pdf"
-                app:icon="@drawable/ic_pdf"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/buttonAddFriend"
-                app:layout_constraintVertical_bias="0.0" />
+                    android:id="@+id/buttonAddPdf"
+                    style="@style/Widget.Cavity.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/medium_margin"
+                    android:layout_marginBottom="100dp"
+                    android:text="@string/add_pdf"
+                    app:icon="@drawable/ic_pdf"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/friend"
+                    app:layout_constraintVertical_bias="0.0" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

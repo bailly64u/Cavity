@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:paddingHorizontal="@dimen/medium_margin"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/searchLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/small_margin"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            style="@style/Widget.Cavity.TextInputLayout.OutlinedBox.Dense">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableTint="?attr/colorOnSurface"
+                android:drawableEnd="@drawable/ic_search"
+                android:hint="Recherchez un ami"
+                android:inputType="textCapSentences" />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+            android:id="@+id/sortText"
+            android:background="?attr/selectableItemBackground"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/small_margin"
+            android:textAppearance="?attr/textAppearanceCaption"
+            android:text="Tri par Fréquence"
+            android:gravity="center"
+            app:drawableStartCompat="@drawable/ic_star"
+            app:drawableTint="?attr/colorPrimary"
+            app:layout_constraintTop_toBottomOf="@id/searchLayout"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/friendList"
+            android:layout_width="0dp"
+            android:paddingTop="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/small_margin"
+            tools:listitem="@layout/item_chipable_pick"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sortText" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

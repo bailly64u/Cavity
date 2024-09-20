@@ -5,6 +5,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.louis.app.cavity.util.L
 
 /**
  * A material dialog that close itself when the registered lifecycle owner reach "on destroy" state
