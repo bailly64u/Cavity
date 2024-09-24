@@ -3,7 +3,10 @@ package com.louis.app.cavity.ui.home
 import android.app.Application
 import androidx.lifecycle.*
 import com.louis.app.cavity.R
-import com.louis.app.cavity.db.WineRepository
+import com.louis.app.cavity.domain.repository.BottleRepository
+import com.louis.app.cavity.domain.repository.CountyRepository
+import com.louis.app.cavity.domain.repository.StatsRepository
+import com.louis.app.cavity.domain.repository.WineRepository
 import com.louis.app.cavity.model.Bottle
 import com.louis.app.cavity.util.Event
 import com.louis.app.cavity.util.postOnce
@@ -13,7 +16,10 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 
 class HomeViewModel(app: Application) : AndroidViewModel(app) {
-    private val repository = WineRepository.getInstance(app)
+    private val countyRepository = CountyRepository.getInstance(app)
+    private val wineRepository = WineRepository.getInstance(app)
+    private val bottleRepository = BottleRepository.getInstance(app)
+    private val statsRepository = StatsRepository.getInstance(app)
 
     private val _userFeedback = MutableLiveData<Event<Int>>()
     val userFeedback: LiveData<Event<Int>>
@@ -22,19 +28,19 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
     private val observedCounty = MutableLiveData<Long>()
 
     val bottleCount = observedCounty.switchMap {
-        repository.getBottleCountForCounty(it)
+        statsRepository.getBottleCountForCounty(it)
     }
 
     val bottlePrice = observedCounty.switchMap {
-        repository.getPriceByCurrencyForCounty(it)
+        statsRepository.getPriceByCurrencyForCounty(it)
     }
 
     val namingCount = observedCounty.switchMap {
-        repository.getNamingsStatsForCounty(it)
+        statsRepository.getNamingsStatsForCounty(it)
     }
 
     val vintagesCount = observedCounty.switchMap {
-        repository.getVintagesStatsForCounty(it)
+        statsRepository.getVintagesStatsForCounty(it)
     }
 
     fun setObservedCounty(countyId: Long) {
@@ -42,7 +48,7 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun deleteOrHideWine(wineId: Long) = viewModelScope.launch(IO) {
-        val wineBottles = repository.getBottlesForWineNotLive(wineId)
+        val wineBottles = bottleRepository.getBottlesForWineNotLive(wineId)
         val folder = mutableListOf<Bottle>() to mutableListOf<Bottle>()
         val (consumed, stock) = wineBottles.fold(folder) { pair, bottle ->
             pair.apply {
@@ -53,25 +59,23 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
             }
         }
 
-        repository.deleteBottles(stock)
+        bottleRepository.deleteBottles(stock)
 
         when {
-            consumed.size > 0 -> repository.hideWineById(wineId)
-            else -> repository.deleteWineById(wineId)
+            consumed.size > 0 -> wineRepository.hideWineById(wineId)
+            else -> wineRepository.deleteWineById(wineId)
         }
 
         // We dirty liers
         _userFeedback.postOnce(R.string.wine_deleted)
     }
 
-    fun getAllCounties() = repository.getAllCounties()
-
-    fun getNonEmptyCounties() = repository.getNonEmptyCounties()
+    fun getNonEmptyCounties() = countyRepository.getNonEmptyCounties()
 
     // This become unnecessary if we figure out how to implement Room's multimaps with standard SQL Join request
     fun getWinesWithBottlesByCounty(countyId: Long) = liveData(Default) {
         emitSource(
-            repository.getWineWithBottlesByCounty(countyId).map { winesWithBottles ->
+            wineRepository.getWineWithBottlesByCounty(countyId).map { winesWithBottles ->
                 winesWithBottles
                     .sortedBy { it.wine.color.order }
                     .map { wineWithBottles ->

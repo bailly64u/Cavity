@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.louis.app.cavity.db.PrefsRepository
+import com.louis.app.cavity.domain.repository.PrefsRepository
 import com.louis.app.cavity.util.Event
 
 class SettingsViewModel(app: Application) : AndroidViewModel(app) {

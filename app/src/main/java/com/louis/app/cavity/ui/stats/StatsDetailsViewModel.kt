@@ -4,10 +4,10 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.switchMap
-import com.louis.app.cavity.db.WineRepository
+import com.louis.app.cavity.domain.repository.StatsRepository
 
 class StatsDetailsViewModel(app: Application) : AndroidViewModel(app) {
-    val repository = WineRepository.getInstance(app)
+    val repository = StatsRepository.getInstance(app)
 
     private val bottlesIds = MutableLiveData<List<Long>>()
 

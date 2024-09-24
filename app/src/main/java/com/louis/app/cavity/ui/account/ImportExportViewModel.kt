@@ -10,9 +10,10 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.louis.app.cavity.R
-import com.louis.app.cavity.db.AccountRepository
-import com.louis.app.cavity.db.WineRepository
+import com.louis.app.cavity.domain.repository.AccountRepository
 import com.louis.app.cavity.domain.backup.BackupBuilder
+import com.louis.app.cavity.domain.repository.BottleRepository
+import com.louis.app.cavity.domain.repository.HistoryRepository
 import com.louis.app.cavity.network.response.ApiResponse
 import com.louis.app.cavity.ui.account.worker.AutoUploadWorker
 import com.louis.app.cavity.ui.account.worker.AutoUploadWorker.Companion.WORK_DATA_HEALTHCHECK_ONLY
@@ -35,7 +36,8 @@ class ImportExportViewModel(app: Application) : AndroidViewModel(app) {
         private const val AUTO_BACKUP_INITIAL_DELAY_IN_HOURS = 1L
     }
 
-    private val repository = WineRepository.getInstance(app)
+    private val historyRepository = HistoryRepository.getInstance(app)
+    private val bottleRepository = BottleRepository.getInstance(app)
     private val accountRepository = AccountRepository.getInstance(app)
     private val workManager = WorkManager.getInstance(app)
     private val backupBuilder = BackupBuilder(app)
@@ -93,7 +95,7 @@ class ImportExportViewModel(app: Application) : AndroidViewModel(app) {
 
         viewModelScope.launch(IO) {
             try {
-                val localEntries = repository.getAllEntriesNotPagedNotLive()
+                val localEntries = historyRepository.getAllEntriesNotPagedNotLive()
                 accountRepository.getHistoryEntries().let { response ->
                     when (response) {
                         is ApiResponse.Success -> {
@@ -141,7 +143,7 @@ class ImportExportViewModel(app: Application) : AndroidViewModel(app) {
 
     fun fetchLocalBottleCount() {
         viewModelScope.launch(IO) {
-            val count = repository.getAllBottlesNotLive().count { !it.consumed.toBoolean() }
+            val count = bottleRepository.getAllBottlesNotLive().count { !it.consumed.toBoolean() }
             _localBottleCount.postValue(count)
         }
     }

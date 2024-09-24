@@ -3,15 +3,20 @@ package com.louis.app.cavity.ui.bottle
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.louis.app.cavity.db.WineRepository
 import com.louis.app.cavity.db.dao.BoundedBottle
+import com.louis.app.cavity.domain.repository.BottleRepository
+import com.louis.app.cavity.domain.repository.FriendRepository
+import com.louis.app.cavity.domain.repository.HistoryRepository
 import com.louis.app.cavity.model.Friend
 import com.louis.app.cavity.model.HistoryEntry
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 
 class ConsumeGiftBottleViewModel(app: Application) : AndroidViewModel(app) {
-    private val repository = WineRepository.getInstance(app)
+    private val bottleRepository = BottleRepository.getInstance(app)
+    private val historyRepository = HistoryRepository.getInstance(app)
+    private val friendRepository = FriendRepository.getInstance(app)
+
 
     var date: Long = System.currentTimeMillis()
 
@@ -39,12 +44,10 @@ class ConsumeGiftBottleViewModel(app: Application) : AndroidViewModel(app) {
         val historyEntry = HistoryEntry(0, date, bottleId, null, comment, type, 0)
 
         viewModelScope.launch(IO) {
-            repository.run {
-                transaction {
-                    consumeBottle(bottleId)
-                    removeTastingForBottle(bottleId)
-                    insertHistoryEntryAndFriends(historyEntry, friendIds)
-                }
+            bottleRepository.transaction {
+                bottleRepository.consumeBottle(bottleId)
+                bottleRepository.removeTastingForBottle(bottleId)
+                historyRepository.insertHistoryEntryAndFriends(historyEntry, friendIds)
             }
         }
     }
@@ -66,5 +69,5 @@ class ConsumeGiftBottleViewModel(app: Application) : AndroidViewModel(app) {
         consumeBottle(bottle.id, comment, consumptionFriend, date, isAGift, isTasting)
     }
 
-    fun getAllFriends() = repository.getAllFriends()
+    fun getAllFriends() = friendRepository.getAllFriends()
 }

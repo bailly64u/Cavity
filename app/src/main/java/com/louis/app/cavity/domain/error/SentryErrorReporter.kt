@@ -3,7 +3,7 @@ package com.louis.app.cavity.domain.error
 import android.app.Application
 import android.content.Context
 import com.louis.app.cavity.BuildConfig
-import com.louis.app.cavity.db.PrefsRepository
+import com.louis.app.cavity.domain.repository.PrefsRepository
 import io.sentry.Sentry
 import io.sentry.SentryLevel
 import io.sentry.SentryOptions

@@ -7,7 +7,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.louis.app.cavity.R
-import com.louis.app.cavity.db.WineRepository
+import com.louis.app.cavity.domain.repository.CountyRepository
+import com.louis.app.cavity.domain.repository.FriendRepository
+import com.louis.app.cavity.domain.repository.GrapeRepository
+import com.louis.app.cavity.domain.repository.ReviewRepository
+import com.louis.app.cavity.domain.repository.WineRepository
 import com.louis.app.cavity.model.County
 import com.louis.app.cavity.model.Friend
 import com.louis.app.cavity.model.Grape
@@ -18,7 +22,11 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 
 class ManagerViewModel(app: Application) : AndroidViewModel(app) {
-    private val repository = WineRepository.getInstance(app)
+    private val wineRepository = WineRepository.getInstance(app)
+    private val countyRepository = CountyRepository.getInstance(app)
+    private val grapeRepository = GrapeRepository.getInstance(app)
+    private val reviewRepository = ReviewRepository.getInstance(app)
+    private val friendRepository = FriendRepository.getInstance(app)
 
     private val _userFeedback = MutableLiveData<Event<Int>>()
     val userFeedback: LiveData<Event<Int>>
@@ -26,18 +34,18 @@ class ManagerViewModel(app: Application) : AndroidViewModel(app) {
 
     var friendPickingImage: Friend? = null
 
-    fun getCountiesWithWines() = repository.getCountiesWithWines()
+    fun getCountiesWithWines() = wineRepository.getCountiesWithWines()
 
-    fun getGrapeWithQuantifiedGrapes() = repository.getGrapeWithQuantifiedGrapes()
+    fun getGrapeWithQuantifiedGrapes() = grapeRepository.getGrapeWithQuantifiedGrapes()
 
-    fun getReviewWithFilledReviews() = repository.getReviewWithFilledReviews()
+    fun getReviewWithFilledReviews() = reviewRepository.getReviewWithFilledReviews()
 
-    fun getAllFriends() = repository.getAllFriends()
+    fun getAllFriends() = friendRepository.getAllFriends()
 
     fun updateCounty(county: County) {
         viewModelScope.launch(IO) {
             try {
-                repository.updateCounty(county)
+                countyRepository.updateCounty(county)
                 _userFeedback.postOnce(R.string.county_renamed)
             } catch (e: IllegalArgumentException) {
                 _userFeedback.postOnce(R.string.empty_county_name)
@@ -49,18 +57,18 @@ class ManagerViewModel(app: Application) : AndroidViewModel(app) {
 
     fun updateCounties(counties: List<County>) {
         viewModelScope.launch(IO) {
-            val currentCounties = repository.getAllCountiesNotLive()
+            val currentCounties = countyRepository.getAllCountiesNotLive()
 
             // Don't trigger observers for nothing
             if (counties != currentCounties) {
-                repository.updateCounties(counties)
+                countyRepository.updateCounties(counties)
             }
         }
     }
 
     fun deleteCounty(countyId: Long) {
         viewModelScope.launch(IO) {
-            repository.deleteCounty(countyId)
+            countyRepository.deleteCounty(countyId)
             _userFeedback.postOnce(R.string.county_deleted)
         }
     }
@@ -68,7 +76,7 @@ class ManagerViewModel(app: Application) : AndroidViewModel(app) {
     fun updateGrape(grape: Grape) {
         viewModelScope.launch(IO) {
             try {
-                repository.updateGrape(grape)
+                grapeRepository.updateGrape(grape)
                 _userFeedback.postOnce(R.string.grape_renamed)
             } catch (e: IllegalArgumentException) {
                 _userFeedback.postOnce(R.string.empty_grape_name)
@@ -80,7 +88,7 @@ class ManagerViewModel(app: Application) : AndroidViewModel(app) {
 
     fun deleteGrape(grape: Grape) {
         viewModelScope.launch(IO) {
-            repository.deleteGrape(grape)
+            grapeRepository.deleteGrape(grape)
             _userFeedback.postOnce(R.string.grape_deleted)
         }
     }
@@ -88,7 +96,7 @@ class ManagerViewModel(app: Application) : AndroidViewModel(app) {
     fun updateReview(review: Review) {
         viewModelScope.launch(IO) {
             try {
-                repository.updateReview(review)
+                reviewRepository.updateReview(review)
                 _userFeedback.postOnce(R.string.review_renamed)
             } catch (e: IllegalArgumentException) {
                 _userFeedback.postOnce(R.string.empty_contest_name)
@@ -100,7 +108,7 @@ class ManagerViewModel(app: Application) : AndroidViewModel(app) {
 
     fun deleteReview(review: Review) {
         viewModelScope.launch(IO) {
-            repository.deleteReview(review)
+            reviewRepository.deleteReview(review)
             _userFeedback.postOnce(R.string.review_deleted)
         }
     }
@@ -109,7 +117,7 @@ class ManagerViewModel(app: Application) : AndroidViewModel(app) {
         viewModelScope.launch(IO) {
             try {
                 val newFriend = friend.copy(name = newName)
-                repository.updateFriend(newFriend)
+                friendRepository.updateFriend(newFriend)
                 _userFeedback.postOnce(R.string.friend_renamed)
             } catch (e: IllegalArgumentException) {
                 _userFeedback.postOnce(R.string.input_error)
@@ -121,7 +129,7 @@ class ManagerViewModel(app: Application) : AndroidViewModel(app) {
 
     fun deleteFriend(friend: Friend) {
         viewModelScope.launch(IO) {
-            repository.deleteFriend(friend)
+            friendRepository.deleteFriend(friend)
             _userFeedback.postOnce(R.string.friend_deleted)
         }
     }
@@ -129,7 +137,7 @@ class ManagerViewModel(app: Application) : AndroidViewModel(app) {
     fun setImageForCurrentFriend(imagePath: String) {
         viewModelScope.launch(IO) {
             friendPickingImage?.copy(imgPath = imagePath)?.let {
-                repository.updateFriend(it)
+                friendRepository.updateFriend(it)
             }
 
             friendPickingImage = null

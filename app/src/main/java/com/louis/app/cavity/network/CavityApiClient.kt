@@ -1,7 +1,7 @@
 package com.louis.app.cavity.network
 
 import com.louis.app.cavity.BuildConfig
-import com.louis.app.cavity.db.PrefsRepository
+import com.louis.app.cavity.domain.repository.PrefsRepository
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient

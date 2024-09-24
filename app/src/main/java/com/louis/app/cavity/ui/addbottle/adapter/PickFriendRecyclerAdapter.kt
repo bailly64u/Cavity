@@ -2,7 +2,6 @@ package com.louis.app.cavity.ui.addbottle.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -29,8 +28,8 @@ class PickFriendRecyclerAdapter(private val onSingleItemSelected: ((item: Friend
     override fun getItemCount() = currentList.size
 
     // TODO: move this logic in view model
-    fun submitList(friends: List<Friend>) {
-        super.submitList(friends.map { PickableFriend(it, false) })
+    fun init(friends: List<Friend>) {
+        submitList(friends.map { PickableFriend(it, false) })
     }
 
     fun getSelectedFriends(): List<Friend> {

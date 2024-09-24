@@ -7,8 +7,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.louis.app.cavity.R
-import com.louis.app.cavity.db.WineRepository
+import com.louis.app.cavity.domain.repository.WineRepository
 import com.louis.app.cavity.db.dao.BoundedBottle
+import com.louis.app.cavity.domain.repository.CountyRepository
+import com.louis.app.cavity.domain.repository.FriendRepository
+import com.louis.app.cavity.domain.repository.GrapeRepository
+import com.louis.app.cavity.domain.repository.ReviewRepository
 import com.louis.app.cavity.model.County
 import com.louis.app.cavity.model.Friend
 import com.louis.app.cavity.model.Grape
@@ -19,7 +23,12 @@ import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.launch
 
 class SearchViewModel(app: Application) : AndroidViewModel(app) {
-    private val repository = WineRepository.getInstance(app)
+    private val countyRepository = CountyRepository.getInstance(app)
+    private val wineRepository = WineRepository.getInstance(app)
+    private val grapeRepository = GrapeRepository.getInstance(app)
+    private val reviewRepository = ReviewRepository.getInstance(app)
+    private val friendRepository = FriendRepository.getInstance(app)
+
     private val globalFilter = MutableLiveData<WineFilter>(FilterConsumed(false))
     private val searchControllerMap = mutableMapOf(
         R.id.searchView to NoFilter,
@@ -37,7 +46,7 @@ class SearchViewModel(app: Application) : AndroidViewModel(app) {
         R.id.rbGroupSize to NoFilter
     )
 
-    val results: LiveData<List<BoundedBottle>> = repository
+    val results: LiveData<List<BoundedBottle>> = wineRepository
         .getBoundedBottles()
         .combineAsync(globalFilter) { receiver, bottles, filter ->
             filter(receiver, bottles, filter)
@@ -56,13 +65,13 @@ class SearchViewModel(app: Application) : AndroidViewModel(app) {
             field = if (value !in 0..2) 0 else value
         }
 
-    fun getAllCounties() = repository.getAllCounties()
+    fun getAllCounties() = countyRepository.getAllCounties()
 
-    fun getAllGrapes() = repository.getAllGrapes()
+    fun getAllGrapes() = grapeRepository.getAllGrapes()
 
-    fun getAllReviews() = repository.getAllReviews()
+    fun getAllReviews() = reviewRepository.getAllReviews()
 
-    fun getAllFriends() = repository.getAllFriends()
+    fun getAllFriends() = friendRepository.getAllFriends()
 
     fun cycleFriendFilterMode(): Int {
         return ++friendFilterMode

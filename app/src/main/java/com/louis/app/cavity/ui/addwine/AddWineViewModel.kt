@@ -3,7 +3,8 @@ package com.louis.app.cavity.ui.addwine
 import android.app.Application
 import androidx.lifecycle.*
 import com.louis.app.cavity.R
-import com.louis.app.cavity.db.WineRepository
+import com.louis.app.cavity.domain.repository.CountyRepository
+import com.louis.app.cavity.domain.repository.WineRepository
 import com.louis.app.cavity.model.County
 import com.louis.app.cavity.model.Wine
 import com.louis.app.cavity.model.WineColor
@@ -14,7 +15,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class AddWineViewModel(app: Application) : AndroidViewModel(app) {
-    private val repository = WineRepository.getInstance(app)
+    private val countyRepository = CountyRepository.getInstance(app)
+    private val wineRepository = WineRepository.getInstance(app)
 
     private val _userFeedback = MutableLiveData<Event<Int>>()
     val userFeedback: LiveData<Event<Int>>
@@ -37,7 +39,7 @@ class AddWineViewModel(app: Application) : AndroidViewModel(app) {
     private val isEditMode: Boolean
         get() = wineId != 0L
 
-    val namings = _countyId.switchMap { repository.getNamingsForCounty(it) }
+    val namings = _countyId.switchMap { wineRepository.getNamingsForCounty(it) }
 
     private var wineId = 0L
 
@@ -46,7 +48,7 @@ class AddWineViewModel(app: Application) : AndroidViewModel(app) {
 
         if (wineId != 0L) {
             viewModelScope.launch(IO) {
-                val wine = repository.getWineByIdNotLive(wineId)
+                val wine = wineRepository.getWineByIdNotLive(wineId)
 
                 _countyId.postValue(wine.countyId)
                 _updatedWine.postValue(wine)
@@ -55,7 +57,7 @@ class AddWineViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
-    fun getAllCounties() = repository.getAllCounties()
+    fun getAllCounties() = countyRepository.getAllCounties()
 
     fun saveWine(
         name: String,
@@ -94,9 +96,10 @@ class AddWineViewModel(app: Application) : AndroidViewModel(app) {
             if (duplicate != null) {
                 when {
                     duplicate.hidden.toBoolean() && !isEditMode -> {
-                        repository.updateWine(duplicate.copy(hidden = false.toInt()))
+                        wineRepository.updateWine(duplicate.copy(hidden = false.toInt()))
                         _wineUpdatedEvent.postOnce(R.string.wine_already_exists_emergence)
                     }
+
                     else -> _userFeedback.postOnce(R.string.wine_already_exists)
                 }
 
@@ -105,13 +108,13 @@ class AddWineViewModel(app: Application) : AndroidViewModel(app) {
 
             when {
                 isEditMode -> {
-                    repository.updateWine(wine)
+                    wineRepository.updateWine(wine)
                     _wineUpdatedEvent.postOnce(R.string.wine_updated)
                     reset()
                 }
 
                 else -> {
-                    repository.insertWine(wine)
+                    wineRepository.insertWine(wine)
                     _wineUpdatedEvent.postOnce(R.string.wine_added)
                     reset()
                 }
@@ -134,7 +137,7 @@ class AddWineViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     private suspend fun getSimilarWineIfAny(wine: Wine): Wine? {
-        val hiddenWines = repository.getWineByAttributes(wine.color, wine.isOrganic, wine.cuvee)
+        val hiddenWines = wineRepository.getWineByAttributes(wine.color, wine.isOrganic, wine.cuvee)
 
         return withContext(Default) {
             for (hiddenWine in hiddenWines) {

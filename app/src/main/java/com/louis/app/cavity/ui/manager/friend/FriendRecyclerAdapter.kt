@@ -20,7 +20,7 @@ class FriendRecyclerAdapter(
     private val onDelete: (Friend) -> Unit
 ) :
     ListAdapter<Friend, FriendRecyclerAdapter.FriendViewHolder>(
-        GrapeItemDiffCallback()
+        FriendItemDiffCallback()
     ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FriendViewHolder {
@@ -33,7 +33,7 @@ class FriendRecyclerAdapter(
     override fun onBindViewHolder(holder: FriendViewHolder, position: Int) =
         holder.bind(getItem(position))
 
-    class GrapeItemDiffCallback : DiffUtil.ItemCallback<Friend>() {
+    class FriendItemDiffCallback : DiffUtil.ItemCallback<Friend>() {
         override fun areItemsTheSame(oldItem: Friend, newItem: Friend) = oldItem.id == newItem.id
 
         override fun areContentsTheSame(oldItem: Friend, newItem: Friend) = oldItem == newItem

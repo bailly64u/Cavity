@@ -4,7 +4,7 @@ import android.database.sqlite.SQLiteConstraintException
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.louis.app.cavity.R
-import com.louis.app.cavity.db.WineRepository
+import com.louis.app.cavity.domain.repository.ReviewRepository
 import com.louis.app.cavity.model.Bottle
 import com.louis.app.cavity.model.Review
 import com.louis.app.cavity.util.Event
@@ -19,7 +19,7 @@ import kotlinx.coroutines.withContext
 
 class ReviewManager(
     private val viewModelScope: CoroutineScope,
-    private val repository: WineRepository,
+    private val repository: ReviewRepository,
     private val editedBottle: Bottle?,
     private val _userFeedback: MutableLiveData<Event<Int>>
 ) {

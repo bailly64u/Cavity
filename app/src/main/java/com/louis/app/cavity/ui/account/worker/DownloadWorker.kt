@@ -4,18 +4,33 @@ import android.app.Application
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.louis.app.cavity.db.AccountRepository
-import com.louis.app.cavity.db.WineRepository
+import com.louis.app.cavity.domain.repository.AccountRepository
+import com.louis.app.cavity.domain.repository.WineRepository
 import com.louis.app.cavity.domain.error.SentryErrorReporter
+import com.louis.app.cavity.domain.repository.BottleRepository
+import com.louis.app.cavity.domain.repository.CountyRepository
+import com.louis.app.cavity.domain.repository.FriendRepository
+import com.louis.app.cavity.domain.repository.GrapeRepository
+import com.louis.app.cavity.domain.repository.HistoryRepository
+import com.louis.app.cavity.domain.repository.ReviewRepository
+import com.louis.app.cavity.domain.repository.TastingRepository
 import com.louis.app.cavity.network.response.ApiResponse
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.withContext
 
-
 class DownloadWorker(context: Context, params: WorkerParameters) :
     CoroutineWorker(context, params) {
-    private val repository = WineRepository.getInstance(context as Application)
-    private val accountRepository = AccountRepository.getInstance(context as Application)
+
+    private val app = context as Application
+    private val countyRepository = CountyRepository.getInstance(app)
+    private val wineRepository = WineRepository.getInstance(app)
+    private val bottleRepository = BottleRepository.getInstance(app)
+    private val grapeRepository = GrapeRepository.getInstance(app)
+    private val reviewRepository = ReviewRepository.getInstance(app)
+    private val historyRepository = HistoryRepository.getInstance(app)
+    private val friendRepository = FriendRepository.getInstance(app)
+    private val tastingRepository = TastingRepository.getInstance(app)
+    private val accountRepository = AccountRepository.getInstance(app)
     private val errorReporter = SentryErrorReporter.getInstance(context)
 
     override suspend fun doWork(): Result {
@@ -36,35 +51,35 @@ class DownloadWorker(context: Context, params: WorkerParameters) :
     }
 
     private suspend fun downloadDatabase() = withContext(IO) {
-        with(repository) {
-            transaction {
-                deleteAllCounties()
-                deleteAllWines()
-                deleteAllBottles()
-                deleteAllFriends()
-                deleteAllGrapes()
-                deleteAllReviews()
-                deleteAllHistoryEntries()
-                deleteAllTastings()
-                deleteAllTastingActions()
-                deleteAllFReviews()
-                deleteAllQGrapes()
-                deleteAllFriendHistoryXRefs()
-                deleteAllTastingFriendXRefs()
+        with(accountRepository) {
+            wineRepository.transaction {
+                countyRepository.deleteAllCounties()
+                wineRepository.deleteAllWines()
+                bottleRepository.deleteAllBottles()
+                friendRepository.deleteAllFriends()
+                grapeRepository.deleteAllGrapes()
+                reviewRepository.deleteAllReviews()
+                historyRepository.deleteAllHistoryEntries()
+                tastingRepository.deleteAllTastings()
+                tastingRepository.deleteAllTastingActions()
+                reviewRepository.deleteAllFReviews()
+                grapeRepository.deleteAllQGrapes()
+                friendRepository.deleteAllFriendHistoryXRefs()
+                tastingRepository.deleteAllTastingFriendXRefs()
 
-                insertCounties(validateResponse(accountRepository.getCounties()))
-                insertWines(validateResponse(accountRepository.getWines()))
-                insertBottles(validateResponse(accountRepository.getBottles()))
-                insertFriends(validateResponse(accountRepository.getFriends()))
-                insertGrapes(validateResponse(accountRepository.getGrapes()))
-                insertReviews(validateResponse(accountRepository.getReviews()))
-                insertHistoryEntries(validateResponse(accountRepository.getHistoryEntries()))
-                insertTastings(validateResponse(accountRepository.getTastings()))
-                insertTastingActions(validateResponse(accountRepository.getTastingActions()))
-                insertFilledReviews(validateResponse(accountRepository.getFReviews()))
-                insertQGrapes(validateResponse(accountRepository.getQGrapes()))
-                insertFriendHistoryXRefs(validateResponse(accountRepository.getHistoryXFriend()))
-                insertTastingFriendXRefs(validateResponse(accountRepository.getTastingXFriend()))
+                countyRepository.insertCounties(validateResponse(getCounties()))
+                wineRepository.insertWines(validateResponse(getWines()))
+                bottleRepository.insertBottles(validateResponse(getBottles()))
+                friendRepository.insertFriends(validateResponse(getFriends()))
+                grapeRepository.insertGrapes(validateResponse(getGrapes()))
+                reviewRepository.insertReviews(validateResponse(getReviews()))
+                historyRepository.insertHistoryEntries(validateResponse(getHistoryEntries()))
+                tastingRepository.insertTastings(validateResponse(getTastings()))
+                tastingRepository.insertTastingActions(validateResponse(getTastingActions()))
+                reviewRepository.insertFilledReviews(validateResponse(getFReviews()))
+                grapeRepository.insertQGrapes(validateResponse(getQGrapes()))
+                friendRepository.insertFriendHistoryXRefs(validateResponse(getHistoryXFriend()))
+                tastingRepository.insertTastingFriendXRefs(validateResponse(getTastingXFriend()))
             }
         }
     }

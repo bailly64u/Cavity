@@ -1,15 +1,15 @@
 package com.louis.app.cavity.domain.backup
 
 import android.content.Context
-import com.louis.app.cavity.db.AccountRepository
-import com.louis.app.cavity.db.WineRepository
+import com.louis.app.cavity.domain.repository.AccountRepository
+import com.louis.app.cavity.domain.repository.HistoryRepository
 import com.louis.app.cavity.model.HistoryEntry
 import com.louis.app.cavity.network.response.ApiResponse
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.withContext
 
 class AutoBackup<T>(
-    private val wineRepository: WineRepository,
+    private val historyRepository: HistoryRepository,
     private val accountRepository: AccountRepository,
     context: Context,
     private val listener: BackupFinishedListener<T>,
@@ -18,7 +18,7 @@ class AutoBackup<T>(
     private val backupBuilder = BackupBuilder(context)
 
     suspend fun tryBackup(healthCheckOnly: Boolean): T = withContext(IO) {
-        val localHistoryEntries = wineRepository.getAllEntriesNotPagedNotLive()
+        val localHistoryEntries = historyRepository.getAllEntriesNotPagedNotLive()
         val distantHistoryEntries: List<HistoryEntry> =
             accountRepository.getHistoryEntries().let { response ->
                 when (response) {
@@ -37,7 +37,7 @@ class AutoBackup<T>(
             BackupBuilder.HealthResult.Ok -> {
                 return@withContext try {
                     if (!healthCheckOnly) {
-                        backupBuilder.backup(accountRepository, wineRepository)
+                        backupBuilder.backup(accountRepository)
                     }
 
                     listener.onSuccess()

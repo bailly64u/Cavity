@@ -3,8 +3,11 @@ package com.louis.app.cavity.ui.tasting
 import android.app.Application
 import android.content.Context
 import androidx.lifecycle.*
-import com.louis.app.cavity.db.WineRepository
+import com.louis.app.cavity.domain.repository.WineRepository
 import com.louis.app.cavity.db.dao.BoundedTasting
+import com.louis.app.cavity.domain.repository.BottleRepository
+import com.louis.app.cavity.domain.repository.HistoryRepository
+import com.louis.app.cavity.domain.repository.TastingRepository
 import com.louis.app.cavity.model.Bottle
 import com.louis.app.cavity.model.HistoryEntry
 import com.louis.app.cavity.model.TastingAction
@@ -16,7 +19,11 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 
 class TastingOverviewViewModel(app: Application) : AndroidViewModel(app) {
-    private val repository = WineRepository.getInstance(app)
+    private val wineRepository = WineRepository.getInstance(app)
+    private val bottleRepository = BottleRepository.getInstance(app)
+    private val historyRepository = HistoryRepository.getInstance(app)
+    private val tastingRepository = TastingRepository.getInstance(app)
+
     private val tastingId = MutableLiveData<Long>(0)
 
     private val _tastingConfirmed = MutableLiveData<Event<Unit>>()
@@ -24,7 +31,7 @@ class TastingOverviewViewModel(app: Application) : AndroidViewModel(app) {
         get() = _tastingConfirmed
 
     val bottles =
-        tastingId.switchMap { repository.getBottlesWithTastingActionsForTasting(it) }
+        tastingId.switchMap { tastingRepository.getBottlesWithTastingActionsForTasting(it) }
 
     fun start(tastingId: Long) {
         this.tastingId.value = tastingId
@@ -34,7 +41,7 @@ class TastingOverviewViewModel(app: Application) : AndroidViewModel(app) {
         tastingAction.done = isChecked.toInt()
 
         viewModelScope.launch(IO) {
-            repository.updateTastingAction(tastingAction)
+            tastingRepository.updateTastingAction(tastingAction)
         }
     }
 
@@ -42,21 +49,21 @@ class TastingOverviewViewModel(app: Application) : AndroidViewModel(app) {
         bottle.tastingId = tastingId
 
         viewModelScope.launch(IO) {
-            repository.updateBottle(bottle)
+            bottleRepository.updateBottle(bottle)
         }
     }
 
     fun updateBottleComment(bottle: Bottle, comment: String) {
         viewModelScope.launch(IO) {
-            repository.updateBottle(bottle.copy(tastingTasteComment = comment))
+            bottleRepository.updateBottle(bottle.copy(tastingTasteComment = comment))
         }
     }
 
     fun requestNotificationsForTastingAction(context: Context, tastingAction: TastingAction) {
         viewModelScope.launch(IO) {
-            val bottle = repository.getBottleByIdNotLive(tastingAction.bottleId)
-            val wine = repository.getWineByIdNotLive(bottle.wineId)
-            val tasting = repository.getTastingById(bottle.tastingId ?: return@launch)
+            val bottle = bottleRepository.getBottleByIdNotLive(tastingAction.bottleId)
+            val wine = wineRepository.getWineByIdNotLive(bottle.wineId)
+            val tasting = tastingRepository.getTastingById(bottle.tastingId ?: return@launch)
 
             val notification = NotificationBuilder.buildTastingNotification(
                 context,
@@ -72,10 +79,10 @@ class TastingOverviewViewModel(app: Application) : AndroidViewModel(app) {
     fun confirmTasting() {
         viewModelScope.launch(IO) {
             val boundedTasting =
-                repository.getBoundedTastingById(tastingId.value ?: 0) ?: return@launch
+                tastingRepository.getBoundedTastingById(tastingId.value ?: 0) ?: return@launch
 
             boundedTasting.tasting.done = true
-            repository.updateTasting(boundedTasting.tasting)
+            tastingRepository.updateTasting(boundedTasting.tasting)
 
             updateStocks(boundedTasting)
 
@@ -99,11 +106,11 @@ class TastingOverviewViewModel(app: Application) : AndroidViewModel(app) {
                     favorite = 0
                 )
 
-                repository.run {
+                bottleRepository.run {
                     transaction {
                         consumeBottle(bottle.id)
-                        insertHistoryEntryAndFriends(entry, friends.map { it.id })
-                        deleteTastingActionsForBottle(bottle.id)
+                        historyRepository.insertHistoryEntryAndFriends(entry, friends.map { it.id })
+                        tastingRepository.deleteTastingActionsForBottle(bottle.id)
                     }
                 }
             }

@@ -1,11 +1,11 @@
 package com.louis.app.cavity.ui.account.fileimport
 
+import android.app.Application
 import android.net.Uri
-import com.louis.app.cavity.db.WineRepository
 
 interface FileBinder {
     @Throws(NumberFormatException::class)
-    suspend fun bind(repository: WineRepository, uri: Uri)
+    suspend fun bind(app: Application, uri: Uri)
 
     @Throws(NumberFormatException::class)
     fun getBindedObjectId(name: String): Long {

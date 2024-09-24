@@ -13,7 +13,7 @@ import com.google.android.material.slider.Slider
 import com.louis.app.cavity.BuildConfig
 import com.louis.app.cavity.R
 import com.louis.app.cavity.databinding.FragmentSettingsBinding
-import com.louis.app.cavity.db.PrefsRepository.Companion.MIN_TEMPLATE_SCALE
+import com.louis.app.cavity.domain.repository.PrefsRepository.Companion.MIN_TEMPLATE_SCALE
 import com.louis.app.cavity.ui.addwine.FragmentCamera.Companion.TEMPLATE_ROTATION
 import com.louis.app.cavity.util.TransitionHelper
 import com.louis.app.cavity.util.setVisible

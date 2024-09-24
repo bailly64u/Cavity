@@ -1,10 +1,18 @@
 package com.louis.app.cavity.domain.backup
 
+import android.app.Application
 import android.content.Context
 import androidx.annotation.StringRes
 import com.louis.app.cavity.R
-import com.louis.app.cavity.db.AccountRepository
-import com.louis.app.cavity.db.WineRepository
+import com.louis.app.cavity.domain.repository.AccountRepository
+import com.louis.app.cavity.domain.repository.BottleRepository
+import com.louis.app.cavity.domain.repository.CountyRepository
+import com.louis.app.cavity.domain.repository.FriendRepository
+import com.louis.app.cavity.domain.repository.GrapeRepository
+import com.louis.app.cavity.domain.repository.HistoryRepository
+import com.louis.app.cavity.domain.repository.ReviewRepository
+import com.louis.app.cavity.domain.repository.TastingRepository
+import com.louis.app.cavity.domain.repository.WineRepository
 import com.louis.app.cavity.model.FileAssoc
 import com.louis.app.cavity.model.HistoryEntry
 import com.louis.app.cavity.network.response.ApiResponse
@@ -39,31 +47,41 @@ class BackupBuilder(private val context: Context) {
             return@withContext HealthResult.Ok
         }
 
-    suspend fun backup(accountRepository: AccountRepository, wineRepository: WineRepository) =
+    suspend fun backup(accountRepository: AccountRepository) =
         withContext(IO) {
             with(accountRepository) {
+                val app = context as Application
+                val countyRepository = CountyRepository.getInstance(app)
+                val wineRepository = WineRepository.getInstance(app)
+                val bottleRepository = BottleRepository.getInstance(app)
+                val grapeRepository = GrapeRepository.getInstance(app)
+                val reviewRepository = ReviewRepository.getInstance(app)
+                val historyRepository = HistoryRepository.getInstance(app)
+                val friendRepository = FriendRepository.getInstance(app)
+                val tastingRepository = TastingRepository.getInstance(app)
+
                 launch {
                     val wines = wineRepository.getAllWinesNotLive()
-                    val bottles = wineRepository.getAllBottlesNotLive()
-                    val friends = wineRepository.getAllFriendsNotLive()
+                    val bottles = bottleRepository.getAllBottlesNotLive()
+                    val friends = friendRepository.getAllFriendsNotLive()
 
                     // Get wines & bottles first, copy them to external dir
                     backupFilesToExternalDir(wines + bottles + friends)
 
                     listOf(
-                        postCounties(wineRepository.getAllCountiesNotLive()),
+                        postCounties(countyRepository.getAllCountiesNotLive()),
                         postWines(wines),
                         postBottles(bottles),
                         postFriends(friends),
-                        postGrapes(wineRepository.getAllGrapesNotLive()),
-                        postReviews(wineRepository.getAllReviewsNotLive()),
-                        postHistoryEntries(wineRepository.getAllEntriesNotPagedNotLive()),
-                        postTastings(wineRepository.getAllTastingsNotLive()),
-                        postTastingActions(wineRepository.getAllTastingActionsNotLive()),
-                        postFReviews(wineRepository.getAllFReviewsNotLive()),
-                        postQGrapes(wineRepository.getAllQGrapesNotLive()),
-                        postTastingFriendsXRefs(wineRepository.getAllTastingXFriendsNotLive()),
-                        postHistoryFriendsXRefs(wineRepository.getAllHistoryXFriendsNotLive())
+                        postGrapes(grapeRepository.getAllGrapesNotLive()),
+                        postReviews(reviewRepository.getAllReviewsNotLive()),
+                        postHistoryEntries(historyRepository.getAllEntriesNotPagedNotLive()),
+                        postTastings(tastingRepository.getAllTastingsNotLive()),
+                        postTastingActions(tastingRepository.getAllTastingActionsNotLive()),
+                        postFReviews(reviewRepository.getAllFReviewsNotLive()),
+                        postQGrapes(grapeRepository.getAllQGrapesNotLive()),
+                        postTastingFriendsXRefs(tastingRepository.getAllTastingXFriendsNotLive()),
+                        postHistoryFriendsXRefs(friendRepository.getAllHistoryXFriendsNotLive())
                     ).forEach {
                         if (it !is ApiResponse.Success) {
                             throw UncompleteExportException()

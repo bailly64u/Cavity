@@ -4,35 +4,27 @@ import android.content.ActivityNotFoundException
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Checkable
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import androidx.core.view.forEach
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.chip.Chip
 import com.louis.app.cavity.R
 import com.louis.app.cavity.databinding.DialogChipablePickBinding
 import com.louis.app.cavity.databinding.FragmentInquireOtherInfoBinding
 import com.louis.app.cavity.model.Bottle
 import com.louis.app.cavity.model.BottleSize
-import com.louis.app.cavity.model.Chipable
 import com.louis.app.cavity.model.Friend
 import com.louis.app.cavity.ui.ActivityMain
-import com.louis.app.cavity.ui.ChipLoader
 import com.louis.app.cavity.ui.LifecycleMaterialDialogBuilder
 import com.louis.app.cavity.ui.SimpleInputDialog
-import com.louis.app.cavity.ui.addbottle.adapter.ChipableRecyclerAdapter
+import com.louis.app.cavity.ui.addbottle.adapter.PickFriendRecyclerAdapter
 import com.louis.app.cavity.ui.addbottle.viewmodel.AddBottleViewModel
 import com.louis.app.cavity.ui.addbottle.viewmodel.OtherInfoManager
-import com.louis.app.cavity.ui.home.HoneycombLayoutManager
 import com.louis.app.cavity.ui.manager.AddItemViewModel
-import com.louis.app.cavity.ui.manager.friend.FriendRecyclerAdapter
 import com.louis.app.cavity.ui.stepper.Step
 import com.louis.app.cavity.util.*
 
@@ -125,11 +117,11 @@ class FragmentInquireOtherInfo : Step(R.layout.fragment_inquire_other_info) {
         }
     }
 
-    private fun bindFriend(friend: Chipable) {
+    private fun bindFriend(friend: Friend) {
         with(binding.friend) {
             AvatarLoader.requestAvatar(
                 requireContext(),
-                ((friend as Friend).imgPath)
+                friend.imgPath
             ) { avatarBitmap ->
                 avatarBitmap?.let { drawable ->
                     avatar.setImageDrawable(drawable)
@@ -203,10 +195,10 @@ class FragmentInquireOtherInfo : Step(R.layout.fragment_inquire_other_info) {
             .setTitle(R.string.gifted_by_friend)
             .setView(dialogBinding.root)
 
-        var actual : AlertDialog? = null
+        var actual: AlertDialog? = null
 
         with(dialogBinding.friendList) {
-            val adapter = ChipableRecyclerAdapter { chipable ->
+            val adapter = PickFriendRecyclerAdapter { chipable ->
                 bindFriend(chipable)
                 actual?.dismiss()
             }
@@ -214,8 +206,9 @@ class FragmentInquireOtherInfo : Step(R.layout.fragment_inquire_other_info) {
             layoutManager = LinearLayoutManager(requireContext())
             this.adapter = adapter
 
+            // TODO: this is UI thread
             otherInfoManager.getAllFriends().observe(viewLifecycleOwner) {
-                adapter.setList(it)
+                adapter.init(it)
                 actual = dialog.show()
             }
 

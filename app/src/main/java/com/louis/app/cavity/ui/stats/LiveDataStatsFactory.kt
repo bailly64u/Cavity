@@ -5,12 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.switchMap
 import com.louis.app.cavity.R
-import com.louis.app.cavity.db.WineRepository
 import com.louis.app.cavity.db.dao.Stat
 import com.louis.app.cavity.db.dao.Year
+import com.louis.app.cavity.domain.repository.StatsRepository
 
 class LiveDataStatsFactory(
-    private val repository: WineRepository,
+    private val repository: StatsRepository,
     private val year: MutableLiveData<Year>,
     private val comparisonYear: MutableLiveData<Year>
 ) {

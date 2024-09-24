@@ -8,15 +8,13 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.louis.app.cavity.db.WineRepository
 import com.louis.app.cavity.domain.error.SentryErrorReporter
 import com.louis.app.cavity.util.Event
 import com.louis.app.cavity.util.postOnce
 import kotlinx.coroutines.launch
 import java.io.File
 
-class FileImportViewModel(app: Application) : AndroidViewModel(app) {
-    private val repository = WineRepository.getInstance(app)
+class FileImportViewModel(private val app: Application) : AndroidViewModel(app) {
     private val errorReporter = SentryErrorReporter.getInstance(app)
 
     private val _fileImportedEvent = MutableLiveData<Event<Pair<Int, Int>>>()
@@ -34,7 +32,7 @@ class FileImportViewModel(app: Application) : AndroidViewModel(app) {
                 if (binder != null) {
                     try {
                         // Might throw NPE even if kotlin thinks differently
-                        binder.bind(repository, uri)
+                        binder.bind(app, uri)
                         binded++
                     } catch (e: NullPointerException) {
                         errorReporter.captureMessage(

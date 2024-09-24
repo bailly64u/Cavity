@@ -1,4 +1,4 @@
-package com.louis.app.cavity.db
+package com.louis.app.cavity.domain.repository
 
 import android.app.Application
 import com.louis.app.cavity.R

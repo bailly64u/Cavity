@@ -1,28 +1,34 @@
 package com.louis.app.cavity.ui.account.fileimport
 
+import android.app.Application
 import android.net.Uri
-import com.louis.app.cavity.db.WineRepository
+import com.louis.app.cavity.domain.repository.BottleRepository
+import com.louis.app.cavity.domain.repository.FriendRepository
+import com.louis.app.cavity.domain.repository.WineRepository
 
 class WineBinder(private val name: String) : FileBinder {
-    override suspend fun bind(repository: WineRepository, uri: Uri) {
+    override suspend fun bind(app: Application, uri: Uri) {
         val id = getBindedObjectId(name)
-        val wine = repository.getWineByIdNotLive(id)
-        repository.updateWine(wine.copy(imgPath = uri.toString()))
+        val wineRepository = WineRepository.getInstance(app)
+        val wine = wineRepository.getWineByIdNotLive(id)
+        wineRepository.updateWine(wine.copy(imgPath = uri.toString()))
     }
 }
 
 class FriendBinder(private val name: String) : FileBinder {
-    override suspend fun bind(repository: WineRepository, uri: Uri) {
+    override suspend fun bind(app: Application, uri: Uri) {
         val id = getBindedObjectId(name)
-        val friend = repository.getFriendByIdNotLive(id)
-        repository.updateFriend(friend.copy(imgPath = uri.toString()))
+        val friendRepository = FriendRepository.getInstance(app)
+        val friend = friendRepository.getFriendByIdNotLive(id)
+        friendRepository.updateFriend(friend.copy(imgPath = uri.toString()))
     }
 }
 
 class BottleBinder(private val name: String) : FileBinder {
-    override suspend fun bind(repository: WineRepository, uri: Uri) {
+    override suspend fun bind(app: Application, uri: Uri) {
         val id = getBindedObjectId(name)
-        val bottle = repository.getBottleByIdNotLive(id)
-        repository.updateBottle(bottle.copy(pdfPath = uri.toString()))
+        val bottleRepository = BottleRepository.getInstance(app)
+        val bottle = bottleRepository.getBottleByIdNotLive(id)
+        bottleRepository.updateBottle(bottle.copy(pdfPath = uri.toString()))
     }
 }

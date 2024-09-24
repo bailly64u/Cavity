@@ -4,7 +4,8 @@ import android.database.sqlite.SQLiteConstraintException
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.louis.app.cavity.R
-import com.louis.app.cavity.db.WineRepository
+import com.louis.app.cavity.domain.grape.QuantifiedGrapeHelper
+import com.louis.app.cavity.domain.repository.GrapeRepository
 import com.louis.app.cavity.model.Bottle
 import com.louis.app.cavity.model.Grape
 import com.louis.app.cavity.util.Event
@@ -19,7 +20,7 @@ import kotlinx.coroutines.withContext
 
 class GrapeManager(
     private val viewModelScope: CoroutineScope,
-    private val repository: WineRepository,
+    private val repository: GrapeRepository,
     private val editedBottle: Bottle?,
     private val _userFeedback: MutableLiveData<Event<Int>>
 ) {

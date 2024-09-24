@@ -7,12 +7,12 @@ import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.WorkerParameters
 import com.louis.app.cavity.R
-import com.louis.app.cavity.db.AccountRepository
-import com.louis.app.cavity.db.PrefsRepository
-import com.louis.app.cavity.db.WineRepository
+import com.louis.app.cavity.domain.repository.AccountRepository
+import com.louis.app.cavity.domain.repository.PrefsRepository
 import com.louis.app.cavity.domain.backup.AutoBackup
 import com.louis.app.cavity.domain.backup.BackupFinishedListener
 import com.louis.app.cavity.domain.error.SentryErrorReporter
+import com.louis.app.cavity.domain.repository.HistoryRepository
 import com.louis.app.cavity.ui.notifications.NotificationBuilder
 import kotlinx.coroutines.delay
 
@@ -21,9 +21,10 @@ import kotlinx.coroutines.delay
 class AutoUploadWorker(private val context: Context, params: WorkerParameters) :
     CoroutineWorker(context, params) {
 
-    private val repository = WineRepository.getInstance(context as Application)
-    private val accountRepository = AccountRepository.getInstance(context as Application)
-    private val prefsRepository = PrefsRepository.getInstance(context as Application)
+    private val app = context as Application
+    private val historyRepository = HistoryRepository.getInstance(app)
+    private val accountRepository = AccountRepository.getInstance(app)
+    private val prefsRepository = PrefsRepository.getInstance(app)
     private val healthCheckOnly = inputData.getBoolean(WORK_DATA_HEALTHCHECK_ONLY, false)
     private val errorReporter = SentryErrorReporter.getInstance(context)
 
@@ -83,7 +84,7 @@ class AutoUploadWorker(private val context: Context, params: WorkerParameters) :
             }
         }
 
-        val autoBackup = AutoBackup(repository, accountRepository, context, listener)
+        val autoBackup = AutoBackup(historyRepository, accountRepository, context, listener)
 
         return try {
             // Tricky part: if this worker is run as non periodic (e.g. as healthcheck)

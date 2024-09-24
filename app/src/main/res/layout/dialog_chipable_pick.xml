@@ -48,7 +48,7 @@
             android:paddingTop="50dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/small_margin"
-            tools:listitem="@layout/item_chipable_pick"
+            tools:listitem="@layout/item_pick_friend"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

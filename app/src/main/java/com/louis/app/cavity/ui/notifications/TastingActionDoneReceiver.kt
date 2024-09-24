@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.louis.app.cavity.db.WineRepository
+import com.louis.app.cavity.domain.repository.TastingRepository
 import com.louis.app.cavity.util.toInt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
@@ -18,7 +18,7 @@ class TastingActionDoneReceiver : BroadcastReceiver() {
     }
 
     override fun onReceive(context: Context, intent: Intent) {
-        val repository = WineRepository.getInstance(context.applicationContext as Application)
+        val repository = TastingRepository.getInstance(context.applicationContext as Application)
         val tastingActionId = intent.getLongExtra(EXTRA_TASTING_ACTION_ID, -1)
 
         if (tastingActionId == -1L) {

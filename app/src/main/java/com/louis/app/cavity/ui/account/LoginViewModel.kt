@@ -6,8 +6,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.louis.app.cavity.R
-import com.louis.app.cavity.db.AccountRepository
-import com.louis.app.cavity.db.PrefsRepository
+import com.louis.app.cavity.domain.repository.AccountRepository
+import com.louis.app.cavity.domain.repository.PrefsRepository
 import com.louis.app.cavity.domain.error.ErrorReporter
 import com.louis.app.cavity.domain.error.SentryErrorReporter
 import com.louis.app.cavity.network.response.ApiResponse

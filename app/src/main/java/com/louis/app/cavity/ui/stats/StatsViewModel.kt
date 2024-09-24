@@ -3,18 +3,20 @@ package com.louis.app.cavity.ui.stats
 import android.app.Application
 import androidx.annotation.StringRes
 import androidx.lifecycle.*
-import com.louis.app.cavity.db.WineRepository
 import com.louis.app.cavity.db.dao.Year
+import com.louis.app.cavity.domain.repository.HistoryRepository
+import com.louis.app.cavity.domain.repository.StatsRepository
 import com.louis.app.cavity.util.combine
 
 class StatsViewModel(app: Application) : AndroidViewModel(app) {
-    private val repository = WineRepository.getInstance(app)
+    private val statsRepository = StatsRepository.getInstance(app)
+    private val historyRepository = HistoryRepository.getInstance(app)
 
     private val groupedYears = Year("Combiner", 0L, System.currentTimeMillis())
     private val year = MutableLiveData(groupedYears)
     private val comparisonYear = MutableLiveData(groupedYears)
 
-    private val statFactory = LiveDataStatsFactory(repository, year, comparisonYear)
+    private val statFactory = LiveDataStatsFactory(statsRepository, year, comparisonYear)
 
     val comparisonText = year.combine(comparisonYear) { year, cYear ->
         "$year <> $cYear"
@@ -22,7 +24,7 @@ class StatsViewModel(app: Application) : AndroidViewModel(app) {
 
     val results = statFactory.results
 
-    val years: LiveData<List<Year>> = repository.getYears().map {
+    val years: LiveData<List<Year>> = historyRepository.getYears().map {
         it.toMutableList().apply {
             reverse()
             add(0, groupedYears)
@@ -48,11 +50,11 @@ class StatsViewModel(app: Application) : AndroidViewModel(app) {
     val comparison: LiveData<Boolean>
         get() = _comparison
 
-    fun getTotalPriceByCurrency() = repository.getTotalPriceByCurrency()
+    fun getTotalPriceByCurrency() = statsRepository.getTotalPriceByCurrency()
 
-    fun getTotalConsumed() = repository.getTotalConsumedBottles()
+    fun getTotalConsumed() = statsRepository.getTotalConsumedBottles()
 
-    fun getTotalStock() = repository.getTotalStockBottles()
+    fun getTotalStock() = statsRepository.getTotalStockBottles()
 
     fun setStatType(viewPagerPos: Int, statType: StatType) {
         statFactory.applyStatType(viewPagerPos, statType)

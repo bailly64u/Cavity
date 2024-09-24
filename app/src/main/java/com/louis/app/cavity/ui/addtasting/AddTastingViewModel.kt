@@ -3,8 +3,10 @@ package com.louis.app.cavity.ui.addtasting
 import android.app.Application
 import androidx.lifecycle.*
 import com.louis.app.cavity.R
-import com.louis.app.cavity.db.WineRepository
 import com.louis.app.cavity.db.dao.BoundedBottle
+import com.louis.app.cavity.domain.repository.BottleRepository
+import com.louis.app.cavity.domain.repository.FriendRepository
+import com.louis.app.cavity.domain.repository.TastingRepository
 import com.louis.app.cavity.model.Friend
 import com.louis.app.cavity.model.Tasting
 import com.louis.app.cavity.model.TastingAction
@@ -15,7 +17,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class AddTastingViewModel(app: Application) : AndroidViewModel(app) {
-    val repository = WineRepository.getInstance(app)
+    private val bottleRepository = BottleRepository.getInstance(app)
+    private val tastingRepository = TastingRepository.getInstance(app)
+    private val friendRepository = FriendRepository.getInstance(app)
 
     private val _userFeedback = MutableLiveData<Event<Int>>()
     val userFeedback: LiveData<Event<Int>>
@@ -35,7 +39,7 @@ class AddTastingViewModel(app: Application) : AndroidViewModel(app) {
 
     val tastingBottles = _selectedBottles.switchMap { updateTastingBottles(it) }
 
-    val friends = repository.getAllFriends()
+    val friends = friendRepository.getAllFriends()
 
     private var currentTasting: Tasting? = null
     private var selectedFriends: List<Long> = emptyList()
@@ -67,14 +71,14 @@ class AddTastingViewModel(app: Application) : AndroidViewModel(app) {
 
         viewModelScope.launch(IO) {
             val bottleIds = _selectedBottles.value?.map { it.bottle.id } ?: emptyList()
-            val tastingId = repository.insertTasting(tasting)
+            val tastingId = tastingRepository.insertTasting(tasting)
 
             // Updating tasting id so that we can reuse it later to schedule alarms
             currentTasting = currentTasting!!.copy(id = tastingId)
 
-            repository.run {
+            tastingRepository.run {
                 transaction {
-                    boundBottlesToTasting(tastingId, bottleIds)
+                    bottleRepository.boundBottlesToTasting(tastingId, bottleIds)
                     insertTastingFriendXRef(tastingId, selectedFriends)
                     generateTastingActions(currentTasting!!, tastingBottles.value)
                 }
@@ -91,7 +95,7 @@ class AddTastingViewModel(app: Application) : AndroidViewModel(app) {
     private fun updateTastingBottles(selectedBottles: List<BoundedBottle>) =
         liveData(IO) {
             val bottleIds = selectedBottles.map { it.bottle.id }
-            val occupiedBottles = repository.getTastingBottleIdsIn(bottleIds)
+            val occupiedBottles = bottleRepository.getTastingBottleIdsIn(bottleIds)
 
             val result = selectedBottles.map {
                 TastingBottle(
@@ -125,7 +129,7 @@ class AddTastingViewModel(app: Application) : AndroidViewModel(app) {
         val actions = mutableListOf<TastingAction>()
 
         for (tastingBottle in tastingBottles) {
-            repository.deleteTastingActionsForBottle(tastingBottle.bottleId)
+            tastingRepository.deleteTastingActionsForBottle(tastingBottle.bottleId)
 
             if (tastingBottle.shouldFridge.toBoolean()) {
                 val action = TastingAction(
@@ -161,7 +165,7 @@ class AddTastingViewModel(app: Application) : AndroidViewModel(app) {
             }
         }
 
-        repository.insertTastingActions(actions)
+        tastingRepository.insertTastingActions(actions)
         _tastingSaved.postOnce(tasting)
     }
 
@@ -170,15 +174,15 @@ class AddTastingViewModel(app: Application) : AndroidViewModel(app) {
     // We also need to remove previous tasting actions
     private suspend fun cleanTastings(tastingBottleIds: List<Long>) {
         withContext(IO) {
-            val emptyTastings = repository.getEmptyTastings()
+            val emptyTastings = tastingRepository.getEmptyTastings()
 
             if (emptyTastings.isNotEmpty()) {
                 _cancelTastingAlarms.postOnce(emptyTastings)
-                repository.deleteTastings(emptyTastings)
+                tastingRepository.deleteTastings(emptyTastings)
             }
 
             tastingBottleIds.forEach {
-                repository.deleteTastingActionsForBottle(it)
+                tastingRepository.deleteTastingActionsForBottle(it)
             }
         }
     }
