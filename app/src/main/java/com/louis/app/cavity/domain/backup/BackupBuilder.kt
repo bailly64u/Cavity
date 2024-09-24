@@ -13,10 +13,9 @@ import com.louis.app.cavity.domain.repository.HistoryRepository
 import com.louis.app.cavity.domain.repository.ReviewRepository
 import com.louis.app.cavity.domain.repository.TastingRepository
 import com.louis.app.cavity.domain.repository.WineRepository
-import com.louis.app.cavity.model.FileAssoc
 import com.louis.app.cavity.model.HistoryEntry
 import com.louis.app.cavity.network.response.ApiResponse
-import com.louis.app.cavity.ui.account.Environment
+import com.louis.app.cavity.domain.Environment
 import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch

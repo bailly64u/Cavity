@@ -1,4 +1,4 @@
-package com.louis.app.cavity.ui.account.fileimport
+package com.louis.app.cavity.domain.fileimport
 
 import android.app.Application
 import android.net.Uri

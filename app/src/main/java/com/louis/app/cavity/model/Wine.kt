@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.louis.app.cavity.domain.backup.FileAssoc
 
 @Entity(
     tableName = "wine",

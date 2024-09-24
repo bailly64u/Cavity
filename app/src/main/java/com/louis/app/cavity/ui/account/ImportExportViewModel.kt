@@ -15,11 +15,11 @@ import com.louis.app.cavity.domain.backup.BackupBuilder
 import com.louis.app.cavity.domain.repository.BottleRepository
 import com.louis.app.cavity.domain.repository.HistoryRepository
 import com.louis.app.cavity.network.response.ApiResponse
-import com.louis.app.cavity.ui.account.worker.AutoUploadWorker
-import com.louis.app.cavity.ui.account.worker.AutoUploadWorker.Companion.WORK_DATA_HEALTHCHECK_ONLY
-import com.louis.app.cavity.ui.account.worker.DownloadWorker
-import com.louis.app.cavity.ui.account.worker.PruneWorker
-import com.louis.app.cavity.ui.account.worker.UploadWorker
+import com.louis.app.cavity.domain.worker.AutoUploadWorker
+import com.louis.app.cavity.domain.worker.AutoUploadWorker.Companion.WORK_DATA_HEALTHCHECK_ONLY
+import com.louis.app.cavity.domain.worker.DownloadWorker
+import com.louis.app.cavity.domain.worker.PruneWorker
+import com.louis.app.cavity.domain.worker.UploadWorker
 import com.louis.app.cavity.util.Event
 import com.louis.app.cavity.util.postOnce
 import com.louis.app.cavity.util.toBoolean

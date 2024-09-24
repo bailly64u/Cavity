@@ -2,6 +2,7 @@ package com.louis.app.cavity.model
 
 import androidx.room.*
 import com.louis.app.cavity.R
+import com.louis.app.cavity.domain.backup.FileAssoc
 import java.util.*
 
 @Entity(

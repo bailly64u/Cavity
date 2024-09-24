@@ -4,7 +4,6 @@ import android.content.Context
 import android.net.Uri
 import android.webkit.MimeTypeMap
 import com.louis.app.cavity.domain.error.SentryErrorReporter
-import com.louis.app.cavity.model.FileAssoc
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream

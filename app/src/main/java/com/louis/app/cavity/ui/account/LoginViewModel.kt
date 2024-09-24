@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.louis.app.cavity.R
+import com.louis.app.cavity.domain.Environment
 import com.louis.app.cavity.domain.repository.AccountRepository
 import com.louis.app.cavity.domain.repository.PrefsRepository
 import com.louis.app.cavity.domain.error.ErrorReporter

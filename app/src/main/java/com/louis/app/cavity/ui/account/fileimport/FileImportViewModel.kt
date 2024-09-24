@@ -9,6 +9,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.louis.app.cavity.domain.error.SentryErrorReporter
+import com.louis.app.cavity.domain.fileimport.BottleBinder
+import com.louis.app.cavity.domain.fileimport.FileBinder
+import com.louis.app.cavity.domain.fileimport.FriendBinder
+import com.louis.app.cavity.domain.fileimport.WineBinder
 import com.louis.app.cavity.util.Event
 import com.louis.app.cavity.util.postOnce
 import kotlinx.coroutines.launch

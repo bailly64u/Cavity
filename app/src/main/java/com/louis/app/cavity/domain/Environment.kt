@@ -1,4 +1,4 @@
-package com.louis.app.cavity.ui.account
+package com.louis.app.cavity.domain
 
 import android.os.Build
 

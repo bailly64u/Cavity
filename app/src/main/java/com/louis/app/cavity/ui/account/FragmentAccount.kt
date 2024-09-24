@@ -18,9 +18,9 @@ import com.google.android.material.transition.MaterialSharedAxis
 import com.louis.app.cavity.R
 import com.louis.app.cavity.databinding.FragmentAccountBinding
 import com.louis.app.cavity.ui.SimpleInputDialog
-import com.louis.app.cavity.ui.account.worker.AutoUploadWorker
-import com.louis.app.cavity.ui.account.worker.PruneWorker
-import com.louis.app.cavity.ui.account.worker.UploadWorker
+import com.louis.app.cavity.domain.worker.AutoUploadWorker
+import com.louis.app.cavity.domain.worker.PruneWorker
+import com.louis.app.cavity.domain.worker.UploadWorker
 import com.louis.app.cavity.ui.settings.SettingsViewModel
 import com.louis.app.cavity.util.DateFormatter
 import com.louis.app.cavity.util.PermissionChecker
