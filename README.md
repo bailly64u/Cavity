@@ -1,4 +1,5 @@
 # Cavity
+
 <p>
   <img src="/assets/readme.png" alt="Cavity screenshots">
 </p>
@@ -6,11 +7,11 @@
 Cavity is a wine cellar manager for Android.
 It follows Material Design 2 principles to have a clear and simple user interface.
 
-Since google in doing everything they can to prevent independant developer from maintaining their
-apps their, the app will no longer receive update on play store and might disappear soon.
-The app is now maintained on [F-Droid](https://f-droid.org/en/) and apk is published in the
-github [release](https://github.com/ninjinskii/Cavity/releases) section.
-After installing the F-Droid client, you can download app here:
+Since Google is doing everything they can to prevent independent developers from maintaining their
+apps there, the app will no longer receive updates on the Play Store and might disappear soon.
+The app is now maintained on [F-Droid](https://f-droid.org/en/) and the APK is published in the
+GitHub [release](https://github.com/ninjinskii/Cavity/releases) section.
+After installing the F-Droid client, you can download the app here:
 [<img src="https://f-droid.org/badge/get-it-on.png"
 alt="Get it on F-Droid"
 height="80">](https://f-droid.org/packages/com.louis.app.cavity)
@@ -21,8 +22,9 @@ alt="IzzyOnDroid"
 height="80">](https://apt.izzysoft.de/packages/com.louis.app.cavity)
 
 ## Features
+
 - Stock management
-- Highlights peaking bottles
+- Highlighting of peaking bottles
 - Stock history
 - Handle friends (Give a bottle to someone, share with a friend...)
 - Buy & consumptions stats
@@ -30,7 +32,8 @@ height="80">](https://apt.izzysoft.de/packages/com.louis.app.cavity)
 - Tasting sessions: decanting notification, chill a bottle
 
 ## Design
-Cavity use gold as its color primary and no secondary color to emphasize luxurious and classy wine
+
+Cavity uses gold as its primary color with no secondary color to emphasize a luxurious and classy wine
 atmosphere.
 
 Primary gold is used sparingly as it breaks the gold effect when using it in large surfaces.
@@ -39,20 +42,23 @@ The app is designed to be used in dark mode, but the light version is also suppo
 lovers.
 
 ## Run the project locally
+
 Clone the project, and you're ready to build and run it via Android Studio.
 
 ## Architecture
-Cavity use Kotlin, Coroutines, Room, LiveData, ViewPager2 with a standard MVVM pattern.
+
+Cavity uses Kotlin, Coroutines, Room, LiveData, ViewPager2 with a standard MVVM pattern.
 
 ## Release process
+
 This project uses CI/CD.
-Workflows are triggered when pushing a tag using this pattern : x.x.x, and create a github release
-with apk file linked
-F-Droid store automatically picks up the apk file from there.
+Workflows are triggered when pushing a tag using this pattern : x.x.x, and create a GitHub release
+with the APK file linked.
+F-Droid store automatically picks up the APK file from there.
 
 Things to do to prepare a release:
 
-- Merge target code into master branch
+- Merge target code into `master` branch
 - Update `/metadata/<languages>/changelogs.txt`
 - Update `/app/build.gradle`: increment version code & update __version name__
 - Update `/app/src/AndroidManifest.xml`: increment version code & update __version name__
@@ -61,6 +67,7 @@ Things to do to prepare a release:
 - Create and push a tag named __version name__
 
 ## Run the monkey
+
 Pin your app (Enable pinned app in android settings, then pin Cavity)
 
 __WARNING: the monkey might play your music very loud at random moments when using it__

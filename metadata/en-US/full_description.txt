@@ -1,6 +1,6 @@
 Cavity is a wine cellar manager for Android.
 
-A stock management app for wine cellars, that lets you always pick the right bottle at the right time.
+A stock management app for wine cellars that lets you always pick the right bottle at the right time.
 
 Features:
 Stock management
@@ -10,4 +10,4 @@ Handle friends (Give a bottle to someone, share with a friend...)
 Buy & consumptions stats
 Search
 Tasting sessions: decanting notification, chill a bottle
-Auto online backups (optionnal: requires an account)
+Auto online backups (optional: requires an account)
